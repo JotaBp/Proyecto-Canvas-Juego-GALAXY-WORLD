@@ -15,15 +15,14 @@ class Enemy{
     
 
     this.posX = gameWidth;
-    this.posY = this.randomInt(20,gameHeight);
+    this.posY = this.randomInt(40,gameHeight-100);
     
     
     
     this.velocity = {
       velX: 5,
-      velY: 5
+      velY: this.randomInt(1,10)
     }
-    this.gravity = .3
 
     this.bulletEnemyArr = [];
 

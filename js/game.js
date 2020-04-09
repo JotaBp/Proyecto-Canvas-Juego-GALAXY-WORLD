@@ -39,7 +39,8 @@ const game = {
   },
   endGame: false,
   score: 0,
-  lives: 5,
+  life: undefined,
+  quantityLife: 5,
 
   init() {
     this.canvasDom = document.getElementById("myCanvas");
@@ -63,7 +64,6 @@ const game = {
 
       this.clear();
       this.drawAll();
-      this.drawLives();
       this.drawScore();
 
 
@@ -75,15 +75,10 @@ const game = {
 
       this.isCollisionBulletAndEnemy(this.player.bulletArr, this.obstacleArr);
       this.isCollisionBulletAndEnemy(this.player.bulletArr, this.enemyArr);
+
       this.isCollisionBulletEnemyAndPlayer()
-
-      if (this.isCollision()) {
-        this.gameOver();
-      }
-
-      if (this.isCollisionPlayerAndEnemy()) {
-        this.gameOver();
-      }
+      this.isCollisionEnemyAndPlayer(this.enemyArr)
+      this.isCollisionEnemyAndPlayer(this.obstacleArr)
 
     }, 1000 / this.FPS);
   },
@@ -91,15 +86,10 @@ const game = {
 
   drawAll() {
     this.background.draw();
+    this.life.draw();
     this.player.draw(this.framesCounter);
     this.obstacleArr.forEach(obs => obs.draw());
     this.enemyArr.forEach(enemy => enemy.draw());
-  },
-
-  drawLives() {
-    this.ctx.font = "600 30px Arial";
-    this.ctx.fillStyle = "#0095DD";
-    this.ctx.fillText(`Lives: ${this.lives}`, 150, 120);
   },
 
   drawScore() {
@@ -107,9 +97,11 @@ const game = {
     this.ctx.fillStyle = "#0095DD";
     this.ctx.fillText(`Score: ${this.score}`, 300, 120);
   },
+  
 
   reset() {
     this.background = new Background(this.ctx, this.canvasDom.width, this.canvasDom.height);
+    this.life = new Life(this.ctx, this.canvasDom.width, this.canvasDom.height, this.quantityLife);
     this.player = new Player(this.ctx, this.canvasDom.width, this.canvasDom.height, this.keys);
     this.obstacleArr = [];
     this.enemyArr = [];
@@ -137,27 +129,29 @@ const game = {
   clearEnemy() {
     this.enemyArr = this.enemyArr.filter(enemy => enemy.posX >= 0);
   },
-  
-  isCollision() {
-    return this.obstacleArr.some(obs => {
-      return (
+
+  isCollisionEnemyAndPlayer(enemyArr) {
+    return enemyArr.some(obs => {
+
+      if (
         this.player.posX + this.player.width >= obs.posX &&
         this.player.posY + this.player.height >= obs.posY &&
         this.player.posX <= obs.posX + obs.width &&
         this.player.posY <= obs.posY + obs.height
-      );
-    });
-  },
-  
-  isCollisionPlayerAndEnemy() {
-    return this.enemyArr.some(enemy => {
-      return (
-        this.player.posX + this.player.width >= enemy.posX &&
-        this.player.posY + this.player.height >= enemy.posY &&
-        this.player.posX <= enemy.posX + enemy.width &&
-        this.player.posY <= enemy.posY + enemy.height
-      );
-    });
+      ) {      
+        
+        this.life.restlife()
+
+        if (this.life.quantityLife < 0) {
+          this.gameOver();
+        }
+
+        let enemyIndex = enemyArr.indexOf(obs);
+        enemyArr.splice(enemyIndex, 1);
+
+
+      }
+    })
   },
 
   isCollisionBulletEnemyAndPlayer() {
@@ -169,7 +163,16 @@ const game = {
           bullet.posY < this.player.posY + this.player.height &&
           bullet.posY + bullet.height > this.player.posY
         ) {
-          this.gameOver()
+
+          this.life.restlife()
+
+          if (this.life.quantityLife < 0) {
+            this.gameOver();
+          }
+
+          let enemyIndex = enemy.bulletEnemyArr.indexOf(bullet);
+          enemy.bulletEnemyArr.splice(enemyIndex, 1);
+
         }
       })
     );
@@ -194,15 +197,10 @@ const game = {
     );
   },
 
+  gameOver() {    
   
-  gameOver() {
-    
-    this.lives -= 1
-
-    if(this.lives < 0){
-      alert("GAME OVER")
-      clearInterval(this.interval);
-    }
+    alert("GAME OVER")
+    clearInterval(this.interval);    
 
   }
 }

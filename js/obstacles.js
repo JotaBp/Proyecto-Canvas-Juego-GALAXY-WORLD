@@ -5,7 +5,7 @@ class Obstacle {
       this.height = this.randomInt(10,300);
   
       this.posX = gameWidth
-      this.posY = this.randomInt(20,gameHeight)
+      this.posY = this.randomInt(40,gameHeight - 100)
   
       this.velX = 10;
 
