@@ -201,8 +201,7 @@ const game = {
 
     // this.backgroundGameOver.resetGame();
 
-    clearInterval(this.interval);
-       
+    setTimeout(clearInterval(this.interval), 3000);
 
   }
 }

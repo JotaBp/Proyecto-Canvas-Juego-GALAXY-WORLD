@@ -7,8 +7,8 @@ class Player {
     this.gameWidth = gameW;
     this.gameHeight = gameH;
 
-    this.width = 149;
-    this.height = 80;
+    this.width = 100;
+    this.height = 121;
 
     this.image = new Image();
     this.image.src = "./images/spaceship_player.png";

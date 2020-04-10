@@ -10,8 +10,8 @@ class Enemy{
       height: gameHeight
     }
 
-    this.width = 200;
-    this.height = 200;
+    this.width = this.randomInt(100,300);
+    this.height = this.width;
     
 
     this.posX = gameWidth;200
