@@ -16,6 +16,7 @@ const game = {
   enemyArr: [],
   rate: 90,
   background: undefined,
+  backgroundGameOver: undefined,
   
   player: undefined,
   playerId: undefined,
@@ -38,7 +39,8 @@ const game = {
       leftRightLimit: window.innerWidth,
   },
   endGame: false,
-  score: 0,
+  score: undefined,
+  quantityScore: 0,
   life: undefined,
   quantityLife: 5,
 
@@ -64,7 +66,6 @@ const game = {
 
       this.clear();
       this.drawAll();
-      this.drawScore();
 
 
       this.generateObstacle();
@@ -87,21 +88,17 @@ const game = {
   drawAll() {
     this.background.draw();
     this.life.draw();
+    this.score.draw();
     this.player.draw(this.framesCounter);
     this.obstacleArr.forEach(obs => obs.draw());
     this.enemyArr.forEach(enemy => enemy.draw());
   },
 
-  drawScore() {
-    this.ctx.font = "600 30px Arial";
-    this.ctx.fillStyle = "#0095DD";
-    this.ctx.fillText(`Score: ${this.score}`, 300, 120);
-  },
-  
-
   reset() {
     this.background = new Background(this.ctx, this.canvasDom.width, this.canvasDom.height);
+    this.backgroundGameOver = new BackgroundGameOver(this.ctx, this.canvasDom.width, this.canvasDom.height);
     this.life = new Life(this.ctx, this.canvasDom.width, this.canvasDom.height, this.quantityLife);
+    this.score = new Score(this.ctx, this.canvasDom.width, this.canvasDom.height, this.quantityScore);
     this.player = new Player(this.ctx, this.canvasDom.width, this.canvasDom.height, this.keys);
     this.obstacleArr = [];
     this.enemyArr = [];
@@ -191,16 +188,21 @@ const game = {
           enemysArr.splice(enemyIndex, 1);
           let bulletIndex = bulletsArr.indexOf(bullet);
           bulletsArr.splice(bulletIndex, 1);
-          this.score++
+          this.score.addScore()
         }
       })
     );
   },
 
-  gameOver() {    
-  
-    alert("GAME OVER")
-    clearInterval(this.interval);    
+  gameOver() {
+
+    this.backgroundGameOver.draw();
+    this.score.drawFinal();
+
+    // this.backgroundGameOver.resetGame();
+
+    clearInterval(this.interval);
+       
 
   }
 }

@@ -3,18 +3,18 @@ class Enemy{
   constructor(ctx, gameWidth, gameHeight) {
     this.ctx = ctx;
     this.image = new Image();
-    this.image.src = "./images/spaceship-8.png";
+    this.image.src = "./images/spaceship-45.png";
 
     this.gameSize = {
       width: gameWidth,
       height: gameHeight
     }
 
-    this.width = 100;
-    this.height = 100;
+    this.width = 200;
+    this.height = 200;
     
 
-    this.posX = gameWidth;
+    this.posX = gameWidth;200
     this.posY = this.randomInt(40,gameHeight-100);
     
     

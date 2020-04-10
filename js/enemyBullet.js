@@ -2,19 +2,16 @@ class EnemyBullet {
 
     constructor(ctx, enemyPosX, enemyPosY, enemyHeight) {
       this.ctx = ctx;
+
+      this.image = new Image();
+      this.image.src = "./images/disparo_enemy.png";
       
       this.posX = enemyPosX;
       this.posY = enemyPosY + enemyHeight / 2;
       
-  
-    //ellipse bullet
-      // this.radiusX = 10;  //mayor-axis
-      // this.radiusY = 5;   //menor-axis
-      // this.rotationEllipse = 0;
-      // this.startAngle = 0;
-      // this.endAngle = Math.PI * 2;
-      this.width = 10;
-      this.height = 10;
+
+      this.width = 56;
+      this.height = 33;
       
       this.velX =  10;
 
@@ -22,12 +19,13 @@ class EnemyBullet {
   
     draw() {
 
-      this.ctx.beginPath();
-      this.ctx.fillStyle = "red";
-      this.ctx.fillRect(this.posX, this.posY, this.width, this.height);
-      // this.ctx.ellipse(this.posX, this.posY, this.radiusX, this.radiusY, this.rotationEllipse, this.startAngle, this.endAngle);   
-      // this.ctx.fill();
-      this.ctx.closePath();
+      this.ctx.drawImage(
+        this.image,
+        this.posX,
+        this.posY,
+        this.width,
+        this.height
+      );
       this.move()
     }
 
